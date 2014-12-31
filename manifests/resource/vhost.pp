@@ -40,31 +40,33 @@
 #    ssl_key  => '/tmp/server.pem',
 #  }
 define nginx::resource::vhost (
-  $ensure                 = 'enable',
-  $listen_ip              = '*',
-  $listen_port            = '80',
-  $listen_options         = undef,
-  $ipv6_enable            = false,
-  $ipv6_listen_ip         = '::',
-  $ipv6_listen_port       = '80',
-  $ipv6_listen_options    = 'default',
-  $ssl                    = false,
-  $ssl_cert               = undef,
-  $ssl_key                = undef,
-  $ssl_port               = '443',
-  $proxy                  = undef,
-  $proxy_read_timeout     = $nginx::params::nx_proxy_read_timeout,
-  $proxy_set_header       = [],
-  $index_files            = [
+  $ensure                   = 'enable',
+  $listen_ip                = '*',
+  $listen_port              = '80',
+  $listen_options           = undef,
+  $ipv6_enable              = false,
+  $ipv6_listen_ip           = '::',
+  $ipv6_listen_port         = '80',
+  $ipv6_listen_options      = 'default',
+  $ssl                      = false,
+  $ssl_cert                 = undef,
+  $ssl_key                  = undef,
+  $ssl_port                 = '443',
+  $proxy                    = undef,
+  $proxy_read_timeout       = $nginx::params::nx_proxy_read_timeout,
+  $proxy_set_header         = [],
+  $index_files              = [
     'index.html',
     'index.htm',
     'index.php'],
-  $server_name            = [$name],
-  $www_root               = undef,
-  $rewrite_www_to_non_www = false,
-  $location_cfg_prepend   = undef,
-  $location_cfg_append    = undef,
-  $try_files              = undef) {
+  $server_name              = [$name],
+  $www_root                 = undef,
+  $rewrite_www_to_non_www   = false,
+  $location_cfg_prepend     = undef,
+  $location_cfg_prepend_raw = undef,
+  $location_cfg_append      = undef,
+  $location_cfg_append_raw  = undef,
+  $try_files                = undef) {
   File {
     ensure => $ensure ? {
       'absent' => absent,
@@ -119,9 +121,19 @@ define nginx::resource::vhost (
       location_cfg_prepend => $location_cfg_prepend }
   }
 
+  if $location_cfg_prepend_raw {
+    Nginx::Resource::Location["${name}-default"] {
+      location_cfg_prepend_raw => $location_cfg_prepend_raw }
+  }
+
   if $location_cfg_append {
     Nginx::Resource::Location["${name}-default"] {
       location_cfg_append => $location_cfg_append }
+  }
+
+  if $location_cfg_append_raw {
+    Nginx::Resource::Location["${name}-default"] {
+      location_cfg_append_raw => $location_cfg_append_raw }
   }
 
   # Create a proper file close stub.

@@ -48,23 +48,25 @@
 #  }
 
 define nginx::resource::location (
-  $ensure               = present,
-  $vhost                = undef,
-  $www_root             = undef,
-  $index_files          = [
+  $ensure                   = present,
+  $vhost                    = undef,
+  $www_root                 = undef,
+  $index_files              = [
     'index.html',
     'index.htm',
     'index.php'],
-  $proxy                = undef,
-  $proxy_read_timeout   = $nginx::params::nx_proxy_read_timeout,
-  $ssl                  = false,
-  $ssl_only             = false,
-  $location_alias       = undef,
-  $option               = undef,
-  $stub_status          = undef,
-  $location_cfg_prepend = undef,
-  $location_cfg_append  = undef,
-  $try_files            = undef,
+  $proxy                    = undef,
+  $proxy_read_timeout       = $nginx::params::nx_proxy_read_timeout,
+  $ssl                      = false,
+  $ssl_only                 = false,
+  $location_alias           = undef,
+  $option                   = undef,
+  $stub_status              = undef,
+  $location_cfg_prepend     = undef,
+  $location_cfg_prepend_raw = undef,
+  $location_cfg_append      = undef,
+  $location_cfg_append_raw  = undef,
+  $try_files                = undef,
   $location) {
   File {
     owner  => 'root',
