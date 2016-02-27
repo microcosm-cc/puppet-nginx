@@ -7,7 +7,8 @@
     proxy_pass         <%= proxy %>;
     proxy_read_timeout <%= proxy_read_timeout %>;
 <% if @location_cfg_append -%><% location_cfg_append.each do |key,value| -%>
-    <%= key %>         <%= value %>;<% end -%><% end -%>
+    <%= key %>         <%= value %>;
+<% end -%><% end -%>
 <% if @location_cfg_append_raw -%>
     <%= location_cfg_append_raw %>
 <% end -%>

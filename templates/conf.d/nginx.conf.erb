@@ -34,6 +34,26 @@ http {
   gzip_types      text/plain application/xml text/css text/js text/xml application/x-javascript text/javascript application/json application/xml+rss;
   <% end %>
 
+  map $remote_addr $loggable {
+      ~176.58.105.63 0;
+      ~192.168.129.4 0;
+      ~192.168.129.5 0;
+      default 1;
+  }
+
+  map $http_cf_ipcountry $allow_country {
+      default yes;
+      CN no;
+      UA no;
+  }
+
+  map $host $test_country {
+      default: no;
+      www.lfgss.com yes;
+  }
+
+  proxy_cache_path /srv/nginx_files_cache levels=1:2 keys_zone=FILES:10m max_size=30g inactive=1M use_temp_path=off;
+
   include /etc/nginx/conf.d/*.conf;
 }
 <% if scope.lookupvar('nginx::mail') %>
